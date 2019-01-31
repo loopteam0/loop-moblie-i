@@ -1,0 +1,28 @@
+
+.cast-card{
+    padding: 5px;
+    ion-slide{
+        width: 200px;
+    }
+    .cont{
+
+        .cnt-img{
+            width: 50px;
+            height: 50px;
+            display: block;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 5px auto;;
+    }
+    .name{
+
+        *{
+            display: block;
+        }
+
+        p{
+            margin: 5px auto;
+        }
+    }
+}
+}

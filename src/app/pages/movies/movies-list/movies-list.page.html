@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Movies</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+   
+  <div class="container" >
+    <div class="card-container" *ngFor="let item of movies">
+
+      <ion-card (click)="onNavigate(item.id)">
+        <ion-img src="{{item.large_cover_image}}"></ion-img>       
+      </ion-card>
+    </div>
+    
+  </div>
+
+  <ion-card class="error-card" *ngIf="error">
+      <ion-card-content>
+        <h1 class="lead">AN ERROR OCCUERED</h1>
+        
+        <div class="auto">
+            <ion-button color="danger" class="retry-button" (click)="retry()">
+              RETRY
+            </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- loading spinner which shows on condition -->
+    <div class="spinner" *ngIf="loading"></div>
+
+  <ion-infinite-scroll (ionInfinite)="loadingEvent($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="crescent"
+        loadingText="Loading more Movies...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

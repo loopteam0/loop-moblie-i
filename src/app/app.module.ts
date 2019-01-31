@@ -8,11 +8,15 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { ShowsDownloadModalPage } from './pages/shows/shows-download-modal/shows-download-modal.page';
+import { MovieDownloadModalPage } from './pages/movies/movie-download-modal/movie-download-modal.page';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  declarations: [AppComponent, ShowsDownloadModalPage,MovieDownloadModalPage],
+  entryComponents: [ ShowsDownloadModalPage, MovieDownloadModalPage],
+  imports: [BrowserModule,HttpClientModule,HttpModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -21,3 +25,4 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
