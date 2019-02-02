@@ -16,7 +16,8 @@ export class YtsService {
 
    /// movie
    yts_url = 'https://yts.am/api/v2/';
-  
+   FANART_URL = 'http://webservice.fanart.tv/v3';
+   Api_Key = '9835c7b65e0db4c3c367c14c9b596483';
    constructor(  private http: Http  , private httpClient: HttpClient ) { }
  
  
@@ -90,6 +91,15 @@ export class YtsService {
        catchError(this.handleError), // then handle the error
         retry(2) // retry a failed request up to 3 times
      );
+     }
+ 
+   getImages(id:string, type:string){
+    const url = `${this.FANART_URL}/${type}/${id}?api_key=${this.Api_Key}`;
+     return  this.httpClient.get(url)
+      .pipe(
+        catchError(this.handleError), // then handle the error
+          retry(2) // retry a failed request up to 3 times
+      );
      }
  
  

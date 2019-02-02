@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { YtsService } from '../../../services/yts.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-movies-list',
   templateUrl: './movies-list.page.html',
   styleUrls: ['./movies-list.page.scss'],
 })
-export class MoviesListPage implements OnInit {
+export class MoviesListPage implements OnInit, OnDestroy {
   movies :Array<any> = [];
   loading;
   error;
   page = 1;
   pageSize = 20;
   onRetry: any;
+  subscription: Subscription;
+  placeholder: boolean;
   constructor(private YTS: YtsService, private route: Router) { }
 
   ngOnInit() {
@@ -22,7 +25,7 @@ export class MoviesListPage implements OnInit {
 
   showMovies(){
     this.loading = true;
-    this.YTS.getMoviesList( this.page, this.pageSize).subscribe(
+   this.subscription = this.YTS.getMoviesList( this.page, this.pageSize).subscribe(
       res =>{
        this.movies = res['movies'];
        this.loading = false; 
@@ -38,13 +41,15 @@ export class MoviesListPage implements OnInit {
   loadingEvent(e){
     //this.loading = true;
     this.page++;
-    this.YTS.getMoviesList(this.page , this.pageSize).subscribe(
+    this.placeholder = true;
+   this.subscription = this.YTS.getMoviesList(this.page , this.pageSize).subscribe(
       res =>{
        for(const data of res['movies']){
          this.movies.push(data);
        }
        e.target.complete();
        this.error = false;
+       this.placeholder = false;
       }, err => {
       //  this.loading = false;
         this.error = true;
@@ -60,7 +65,7 @@ export class MoviesListPage implements OnInit {
   retry(){
     this.error = false;
     this.loading = true;
-    this.YTS.getMoviesList(this.page , this.pageSize).subscribe(
+   this.subscription = this.YTS.getMoviesList(this.page , this.pageSize).subscribe(
       res =>{
        for(const data of res['movies']){
          this.movies.push(data);
@@ -75,7 +80,13 @@ export class MoviesListPage implements OnInit {
     );
   }
 
-  onNavigate(id){
-    this.route.navigate([`/tabs/movies-list/${id}`])
+  onNavigate(id,imdb_id){
+    this.route.navigate([`/tabs/movies-list/${id}/${imdb_id}`])
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.subscription.unsubscribe()
   }
 }

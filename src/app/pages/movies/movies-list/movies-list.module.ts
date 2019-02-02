@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { MoviesListPage } from './movies-list.page';
-import {NgPipesModule} from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
+import { SharedModule } from 'src/shared/shared.module';
+
 
 const routes: Routes = [
   {
@@ -15,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,NgPipesModule,
     IonicModule,

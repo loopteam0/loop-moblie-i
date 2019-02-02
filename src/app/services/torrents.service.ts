@@ -12,17 +12,21 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TorrentSearchApi } from 'torrent-search-api';
+// tslint:disable-next-line:import-spacing
+
+
+//const torrent = __non_webpack_require__('torrent-search-api');
 
 @Injectable({
   providedIn: 'root'
 })
 export class TorrentsService {
   torrentApi: TorrentSearchApi;
+  torrent: any;
 
   constructor() {
     this.torrentApi = window.require('torrent-search-api');
-   }
-
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -37,20 +41,20 @@ export class TorrentsService {
       );
     }
     // return an observable with a user-facing error message
-    return throwError('Something bad happened, Check internet connection and retry.');
+    return throwError(
+      'Something bad happened, Check internet connection and retry.'
+    );
   }
 
   async getTorrents(title, cat, limit) {
-
     try {
       this.torrentApi.enableProvider('1337x');
-      const torrents = await this.torrentApi.search( title, cat , limit);
-  
+      const torrents = await this.torrentApi.search(title, cat, limit);
+
       return torrents;
-      } catch (error) {
-          throwError(error);
-  
-        }
+    } catch (error) {
+      throwError(error);
     }
+  }
 
 }

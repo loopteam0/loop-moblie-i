@@ -21,8 +21,8 @@ export class ShowsDownloadModalPage implements OnInit {
   }
 
   download(url) {
-  console.log(url);
-  
+    console.log(url);
+    window.open(url,'_system', 'location=yes');
   }
 
 }

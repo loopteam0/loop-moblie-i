@@ -1,100 +1,56 @@
-<ion-header>
+<ion-header translucent='true'>
   <ion-toolbar>
-    <ion-buttons slot="start">    
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
 
-    <ion-title *ngIf="details">{{details.title_long}}</ion-title>
+    <ion-title *ngIf="movie">{{movie.title}}</ion-title>
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh" pullingText="Release to refresh" refreshingSpinner="" refreshingText="">
-    </ion-refresher-content>
-  </ion-refresher>
 
-  <ion-card class="error-card" *ngIf="error">
-      <ion-card-content>
-        <h1 class="lead">AN ERROR OCCUERED</h1>
-        <p class="sub">Pull to retry</p>
-      </ion-card-content>
-    </ion-card>
-
+<ion-content fullscreen="true">
   <div class="spinner" *ngIf="loading"></div>
-  
-  <div *ngIf="details">
-
-    <ion-grid fixed>
-      <ion-row>
-        <ion-col class="title-col" size="12">
-        </ion-col>
-        <ion-col size="5">
-          <ion-img  [src]="details.medium_cover_image"></ion-img>
-        </ion-col>
-        <ion-col size="7">
-          <div class="col-info">
-              <h3 class="title">{{details.title}} <span class="small">({{details.year}})</span></h3>
-              <span class="genres" *ngFor="let item of details.genres"> {{item}} </span>
-              <p><span>Rating: </span> <span> {{details.rating}}%</span> </p>
-            <p><span>Runtime: </span> <span>{{details.runtime}}</span> </p>
-            
-            <!-- <p><span>Aring: </span> <span>{{details.air_day}} </span> <span>{{details.air_time}}</span> </p>
-            <p><span>Latest Season: </span> <span> {{details.num_seasons}}</span> </p>
-            <p><span>Last Update: </span> <span> {{details.last_updated | date:'mediumDate'}}</span> </p> -->
+  <div >
+    <div class="movie-header">
+      <img *ngIf="fanart" [src]='fanart'>
+    </div>
+    <div *ngIf="movie" class="movie-content" padding>
+      <div class="movie-summary">
+        <div class="poster">
+          <div class="content">
+            <img src="{{movie.medium_cover_image}}">
           </div>
-  
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  
-    <!-- <ion-card class="genres">
-      <ion-card-content>
-        <ion-badge color="primary" >{{item}}</ion-badge>
-      </ion-card-content>
-    </ion-card> -->
-  
-    <ion-card class="synopsis">
-      <ion-card-content>
-        <p>{{details.description_intro}}</p>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card class="cast-card">
-      <ion-slides scrollbar="true" pager="false">
-        <ion-slide  *ngFor="let item of details.cast" class="cast-container">
-          <div class="cont">
-              <div class="cnt-img">
-                  <img [src]="item.url_small_image" alt="">
-                </div>
-                <div class="name">
-                  <p>{{item.name}}</p>
-                    <span>as</span>
-                  <p class="fade">{{item.character_name}}</p>
-                </div>
+        </div>
+        <div class="item-content">
+          <span class="title">{{movie.title}}</span>
+          <span class="country">{{movie.download_count}} downloads | {{movie.mpa_rating || 'N/A'}}</span>
+          <span class="genre ">{{movie.genres | join:" | "}}</span>
+          <span class="line">
+            <span class="date">{{movie.date_uploaded | date:'mediumDate'}}</span>
+            <span class="time">{{movie.runtime |duration}}</span>
+          </span>
+          <!-- services rating -->
+          <div class="ratings">
+            <div class="imdb">
+              <span>imdb <span class="nb">{{movie.rating}}</span></span>
+            </div>
           </div>
-        </ion-slide>
-      </ion-slides>      
-    </ion-card>
-  
-      <!-- Floating button -->
-    <ion-fab (click)="showDownloadModal(details)" class="btnflt" vertical="bottom" horizontal="end">
-      <ion-fab-button translucent ><ion-icon name="download"></ion-icon></ion-fab-button>
-    </ion-fab>
-  
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button><ion-icon name="code"></ion-icon></ion-fab-button>
-    <ion-fab-list side="start">
-      <ion-fab-button>1080p</ion-fab-button>
-      <ion-fab-button>720p</ion-fab-button>
-    </ion-fab-list>
-  </ion-fab> -->
-
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
+        </div>
+      </div>
+      <div class="movie-more">
+        <!-- <span><span class="key">Director: </span>{{movie.director}}</span> -->
+        <span><span class="key">Cast: </span>{{movie.cast | join:", "}}</span>
+        <span class="description"><span class="key">Storyline: </span> {{movie.description_intro}}</span>
+      </div>
+    </div>
   </div>
+
+  <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button><ion-icon name="download"></ion-icon></ion-fab-button>
+      <ion-fab-list *ngIf="movie.torrents" side="start">
+        <ion-fab-button *ngFor="let item of movie.torrents" (click)="download(item.url)" >{{item.quality}}</ion-fab-button>
+      </ion-fab-list>
+  </ion-fab> 
 </ion-content>

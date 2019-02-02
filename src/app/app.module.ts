@@ -13,6 +13,7 @@ import { HttpModule } from '@angular/http';
 import { ShowsDownloadModalPage } from './pages/shows/shows-download-modal/shows-download-modal.page';
 import { MovieDownloadModalPage } from './pages/movies/movie-download-modal/movie-download-modal.page';
 
+
 @NgModule({
   declarations: [AppComponent, ShowsDownloadModalPage,MovieDownloadModalPage],
   entryComponents: [ ShowsDownloadModalPage, MovieDownloadModalPage],

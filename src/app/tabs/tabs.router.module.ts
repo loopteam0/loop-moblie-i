@@ -17,7 +17,7 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'movies-list/:imdb_id',
+        path: 'movies-list/:imdb_id/:id',
         children: [
           {
             path: '',
@@ -72,7 +72,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'spinner',
+        redirectTo: 'movies-list',
         pathMatch: 'full'
       }
     ]
