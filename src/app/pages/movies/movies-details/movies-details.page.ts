@@ -1,0 +1,97 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { YtsService } from '../../../services/yts.service';
+import { ActivatedRoute } from '@angular/router';
+import { ParamMap } from '@angular/router';
+import { UiServiceService } from '../../../services/ui-service.service';
+import { MovieDownloadModalPage } from '../movie-download-modal/movie-download-modal.page';
+import { IonRouterOutlet } from '@ionic/angular';
+import { map } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-movies-details',
+  templateUrl: './movies-details.page.html',
+  styleUrls: ['./movies-details.page.scss']
+})
+export class MoviesDetailsPage implements OnInit ,OnDestroy {
+  movie: any;
+  loading: boolean;
+  error: boolean;
+  parms: Subscription;
+  Id: any;
+  img_id;
+  fanart;
+  subscription: Subscription;
+  Image_subscription: Subscription;
+  constructor(
+    private route: ActivatedRoute,
+    private YTS: YtsService,
+    private UI: UiServiceService,
+    private router: IonRouterOutlet,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit() {
+    // this the id of the movie form the route
+    this.parms = this.route.paramMap.subscribe((params: ParamMap) => {
+      const imdb_id = params.get('imdb_id');
+      this.img_id = params.get('id');
+      this.Id = imdb_id;
+    });
+
+    this.showDetails(this.Id);
+    this.showImages(this.img_id);
+  }
+
+  showDetails(id) {
+    this.loading = true;
+    this.error = false;
+
+   this.subscription = this.YTS.getMovieDetails(id).subscribe(
+      res => {
+        this.movie = res['movie'];
+        this.loading = false;
+        this.error = false;
+      },
+      err => {
+        this.loading = false;
+        this.error = true;
+      }
+    );
+  }
+
+  showImages(id: string) {
+    this.Image_subscription = this.YTS.getImages(id, 'movies')
+      .pipe(map((res) => res['moviebackground']))
+      .subscribe((res) =>{
+         const img =  res[1].url;
+         console.log(img);
+         this.fanart = this.sanitizer.bypassSecurityTrustUrl(img)
+        }, err => console.log(err));
+  }
+
+  showDownloadModal(data) {
+    this.UI.modal(data, MovieDownloadModalPage);
+  }
+
+  doRefresh(e) {
+    e.target.complete();
+    this.showDetails(this.Id);
+  }
+
+  download(url) {
+    console.log(url);
+    window.open(url, '_system', 'location=yes');
+  }
+
+  back() {
+    this.router.canGoBack();
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+    this.parms.unsubscribe();
+    this.Image_subscription.unsubscribe();
+  }
+}

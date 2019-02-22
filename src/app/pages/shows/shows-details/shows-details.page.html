@@ -1,0 +1,114 @@
+<ion-header class="header">
+  <ion-toolbar class="toolbar">
+
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title *ngIf="details">{{details.title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- <ion-content>
+  <div class="spinner" *ngIf="loading"></div>
+
+  <div *ngIf="details">
+
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col class="title-col" size="12">
+        </ion-col>
+        <ion-col size="5">
+          <ion-img [src]="details.images.banner"></ion-img>
+        </ion-col>
+        <ion-col size="7">
+          <div class="col-info">
+            <h3 class="title">{{details.title}} <span class="small">({{details.year}})</span></h3>
+            <span class="genres" *ngFor="let item of details.genres"> {{item}} </span>
+
+            <p><span>Rating: </span> <span> {{details.rating.percentage | json}}%</span> </p>
+            <p><span>Runtime: </span> <span>{{details.runtime}}</span> </p>
+
+            <p><span>Aring: </span> <span>{{details.air_day}} </span> <span>{{details.air_time}}</span> </p>
+            <p><span>Latest Season: </span> <span> {{details.num_seasons}}</span> </p>
+            <p><span>Last Update: </span> <span> {{details.last_updated | date:'mediumDate'}}</span> </p>
+          </div>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  
+
+    <ion-card class="synopsis">
+      <ion-card-content>
+        <p>{{details.synopsis}}</p>
+      </ion-card-content>
+    </ion-card>
+ 
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="showDownloadModal(details)">
+        <ion-icon name="download"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+
+  <ion-card class="error-card" *ngIf="error">
+    <ion-card-content>
+      <h1 class="lead">AN ERROR OCCUERED</h1>
+      <p class="sub">Pull to retry</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh" pullingText="Release to refresh" refreshingSpinner="" refreshingText="">
+    </ion-refresher-content>
+  </ion-refresher>
+
+</ion-content> -->
+
+
+<ion-content class="content" fullscreen="true">
+    <div class="spinner" *ngIf="loading"></div>
+  <div *ngIf="!loading"> 
+    <div #gbImage id="gbImage" class="movie-header">
+         <img [src]="setBackground(details.images.fanart)">   
+    </div>
+    <div class="movie-content"  padding >
+        <div class="movie-summary">
+            <div class="poster">
+                <div class="content">
+                    <img src="{{details.images.banner}}">
+                </div>
+            </div>
+            <div class="item-content">
+                <span class="title">{{details.title}}</span>
+                <span class="country">{{details.download_count}}</span>
+                <span class="country">{{details.air_day}} {{details.air_time}} | {{details.runtime}}min</span>
+                <span class="genre ">{{details.genres | join:" | "}}</span>
+                <span class="line"> 
+                  <span class="time"></span>
+                  <span class="date">Last updated on {{details.last_updated | date:'mediumDate'}} </span>
+                </span>
+                <!-- services rating -->
+                <div class="ratings"  >
+                    <div class="imdb"  >
+                        <span>imdb <span class="nb">{{details.rating.percentage/10}}</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="movie-more">
+            <!-- <span><span class="key">Director: </span>{{movie.director}}</span> -->
+         <span><span class="key">Cast: </span></span> 
+          <span class="description"><span class="key">Storyline: </span> {{details.synopsis}}</span>
+        </div>
+    </div>
+    </div>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="showDownloadModal(details)">
+        <ion-icon name="download"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+</ion-content>

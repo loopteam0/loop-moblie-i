@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Loop Log in</ion-title>
+
+
+    <ion-buttons slot="end">
+      <ion-button (click)="goHome()">
+        <ion-icon slot="end" name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <form>
+    <ion-item>
+      <ion-label position="floating">E-Mail</ion-label>
+      <ion-input type='email'></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type='password'></ion-input>
+    </ion-item>
+
+
+    <div class='login-buttons'>
+      <ion-button block color="primary" type="submit" (click)="onSubmit($event)" [disabled]="loginForm.invalid">
+        Log in
+      </ion-button>
+
+      <ion-button (click)="onSignUp()">
+        Sign Up
+      </ion-button>
+    </div>
+  </form>
+
+</ion-content>
