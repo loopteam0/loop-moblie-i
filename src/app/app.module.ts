@@ -17,7 +17,8 @@ import { MovieDownloadModalPage } from './pages/movies/movie-download-modal/movi
 @NgModule({
   declarations: [AppComponent, ShowsDownloadModalPage,MovieDownloadModalPage],
   entryComponents: [ ShowsDownloadModalPage, MovieDownloadModalPage],
-  imports: [BrowserModule,HttpClientModule,HttpModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule,HttpClientModule,HttpModule,
+     IonicModule.forRoot(), AppRoutingModule ],
   providers: [
     StatusBar,
     SplashScreen,

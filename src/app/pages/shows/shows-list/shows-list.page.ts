@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PopcornService } from '../../../services/popcorn.service';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 
 @Component({
@@ -14,13 +15,30 @@ export class ShowsListPage implements OnInit {
   error;
   page = 1;
   placeholer:boolean;
-  constructor(private service: PopcornService ,private route: Router) { }
+  enableSearch:boolean;
+
+  constructor(private service: PopcornService ,private route: Router, private UI:UiServiceService) { }
 
   ngOnInit() {
     this.showShows();
   }
 
+
+  togleSearch(){
+    this.enableSearch = !this.enableSearch;
+  }
+
+  ionClear(){
+    this.togleSearch();
+  }
+
+  ionChange(val:string){
+
+  }
+
   showShows(){
+    this.loading = true;
+    this.error = false;
     this.service.getShowsList(1).subscribe(
       res => {
         this.Shows = res;
@@ -30,6 +48,7 @@ export class ShowsListPage implements OnInit {
       err => {
         this.loading = false;
         this.error = true;
+        this.UI.presentAlert('Error', err)
       }
     )
   }
@@ -37,6 +56,7 @@ export class ShowsListPage implements OnInit {
   loadingEvent(e) {
     this.page++;
     this.placeholer = true;
+    this.error = false;
     this.service.getShowsList(this.page).subscribe(
       res => {
         // tslint:disable-next-line:whitespace

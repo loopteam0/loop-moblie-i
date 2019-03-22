@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
 @NgModule({
     imports: [CommonModule],
     declarations: [ SafePipe, DurationPipe, JoinPipe],
-    exports: [CommonModule, SafePipe, DurationPipe, JoinPipe]
+
+    exports: [CommonModule, SafePipe, DurationPipe, JoinPipe, CommonModule]
 })
 export class SharedModule {}
 

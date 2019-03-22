@@ -49,7 +49,7 @@ export class ShowsDetailsPage implements OnInit, OnDestroy {
       }, err => {
         this.loading = false;
         this.error = true;
-
+        this.UI.presentAlert('Error', err)
       }
     );
   }

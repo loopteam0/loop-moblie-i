@@ -34,8 +34,6 @@ export interface MoviesInt {
     en: object;
     title_english: string;
     description_intro: string;
-    quote: string;
-    author: string;
     results: Array<any>;
     total_results: any;
     original_name: string;
@@ -43,3 +41,9 @@ export interface MoviesInt {
     next_episode_to_air: any;
     networks: Array<any>;
 }
+
+export interface Quotes {
+    quote: string;
+    author: string;
+}
+

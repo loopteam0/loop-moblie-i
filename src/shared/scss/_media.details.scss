@@ -25,6 +25,7 @@ $bg-color-loading: darken($bg-color, 3);
 
 ion-content {
     font-size: 16px;
+    padding-top: 0.5em;
 }
 
 ion-header.header {
@@ -44,13 +45,14 @@ ion-content.content {
 
 
 .movie-header {
-    height: 10em;
+    height: 13em;
     overflow: hidden;
     position: relative;
     background-color: #000;
 
     img {
         position: absolute;
+        height: 100%;
         top: 0;
         left: 0;
         opacity: 0.7;
@@ -65,31 +67,26 @@ ion-content.content {
 
 .movie-summary {
     overflow: visible;
-
     margin-bottom: 1em;
     padding: 0;
-
     align-items: flex-start;
-
     display: flex;
     flex-direction: row;
 
     .poster {
-        margin-top: -4em;
-        margin-right: 1em;
+        margin-top: -3em;
+        margin-right: 0.7em;
 
-        @include aspect-ratio(1, 1.5);
+        @include aspect-ratio(1.1, 1.5);
 
         flex: 2;
         min-width: auto;
         min-height: auto;
-        background: rgb(8, 8, 8);
         padding: 0;
+
         img {
             width: auto;
             height: auto;
-
-            //box-shadow: 0 0 10px black;
             box-shadow: 0 -2px 10px rgba(15, 15, 15, 0.671);
             border-radius: 3px;
         }
@@ -97,56 +94,58 @@ ion-content.content {
 
     .item-content {
         overflow: hidden;
-
         flex: 3;
-
         display: flex;
         flex-direction: column;
-
         padding: 0;
     }
 
     .title {
         margin-bottom: .5em;
-
-        font-size: 1em;
+        font-size: 1.1em;
         font-weight: bold;
-
         color: $color-title;
     }
 
     .country {
-        margin-bottom: .2em;
-
+        margin-bottom: .3em;
         font-size: .8em;
 
         color: $color-subtitle;
     }
 
     .genre {
-        margin-bottom: .5em;
-
+        margin-bottom: .3em;
+        text-transform: capitalize;
         font-size: .8em;
 
         color: $color-subsubtitle;
     }
-
-    .ratings {
-        margin-bottom: .5em;
-
+    .line {
+        margin-bottom: .3em;
         display: flex;
         flex-direction: row;
+        >* {
+            // margin: 0 .4em 0 0;
+        }
+    }
 
+    .genre , .country , .line {
+        margin-left: 3px;
+    }
+    .ratings {
+        margin-bottom: .3em;
+        margin-left: 0; 
+        display: flex;
+        flex-direction: row;
         font-size: .8em;
 
         .imdb {
             margin-right: 4px;
             padding: 4px 6px;
             border-radius: 2px;
-
             background-color: #FFB10A;
             color: black;
-
             font-weight: bold;
 
             .nb {
@@ -155,33 +154,21 @@ ion-content.content {
         }
     }
 
-    .line {
-        margin-bottom: .5em;
-
-        display: flex;
-        flex-direction: row;
-
-        >* {
-            margin: 0 .4em 0 0;
-        }
-    }
+ 
 
     .date {
         font-size: .8em;
-
         color: $color-subtitle;
     }
 
     .time {
         font-size: .8em;
-        font-weight: bold;
-
+        //font-weight: bold;
         color: $color-subtitle;
     }
 }
 
 .movie-more {
-
     font-size: .85em;
 
     span {
@@ -204,15 +191,3 @@ ion-content.content {
 
 }
 
-//   ion-footer {
-//       ion-toolbar.toolbar {
-//           overflow: visible;
-//           contain: none;
-
-//           .toolbar-content {
-//               display: flex;
-//               flex-direction: row;
-//               justify-content: center;
-//           }
-//       }
-//   }

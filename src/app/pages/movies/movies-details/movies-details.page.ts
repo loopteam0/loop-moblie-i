@@ -57,6 +57,7 @@ export class MoviesDetailsPage implements OnInit ,OnDestroy {
       err => {
         this.loading = false;
         this.error = true;
+        this.UI.presentAlert('Error', err)
       }
     );
   }
@@ -66,7 +67,6 @@ export class MoviesDetailsPage implements OnInit ,OnDestroy {
       .pipe(map((res) => res['moviebackground']))
       .subscribe((res) =>{
          const img =  res[1].url;
-         console.log(img);
          this.fanart = this.sanitizer.bypassSecurityTrustUrl(img)
         }, err => console.log(err));
   }

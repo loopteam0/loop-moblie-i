@@ -1,6 +1,19 @@
-<ion-header>
+<ion-header autoHide='true'>
   <ion-toolbar>
-    <ion-title>Movies</ion-title>
+    <ion-title *ngIf="!enableSearch">Movies</ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button class="search" *ngIf="!enableSearch" (click)="togleSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+
+    <ion-searchbar #input animated debounce='2000' class="search" *ngIf="enableSearch"
+    (ionClear)='ionClear()' (ionChange)='ionChange(input.value)'  
+     placeholder="Search Movies"></ion-searchbar>
+
   </ion-toolbar>
 </ion-header>
 
@@ -45,7 +58,7 @@
 <ion-content padding class="page-content">
 
   <div>
-    <div *ngIf="!loading">
+    <div *ngIf="movies">
       <div>
         <div class="movies current">
           <div *ngFor="let movie of movies" class="movie-detail" tappable>
@@ -56,13 +69,13 @@
             </div>
             <div class="item-content">
               <span (click)="onNavigate(movie.id,movie.imdb_code)" class="title">{{movie.title}}</span>
-              <span class="country">{{movie.language}}</span>
               <span class="genre">{{movie.genres | join:" | "}}</span>
 
               <span class="line">
-                <span class="date">{{movie.year}}</span>
+                <span class="date">{{movie.year}} | </span>
                 <span class="time">{{movie.runtime | duration}}</span>
               </span>
+              <span class="country">{{movie.language}}</span>
               <!-- services rating -->
               <div class="ratings">
                 <div class="imdb">
@@ -76,13 +89,8 @@
       </div>
     </div>
 
-    <ion-infinite-scroll (ionInfinite)="loadingEvent($event)">
-        <ion-infinite-scroll-content
-          loadingSpinner="crescent"
-          loadingText="Loading more Movies...">
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
    
+
     <div *ngIf="loading || placeholder">
       <div class="spinner" *ngIf="loading"></div>
       <div class="movies current">
@@ -103,19 +111,24 @@
         </div>
       </div>
     </div>
+
+
   </div>
   <ion-card class="error-card" *ngIf="error">
-      <ion-card-content>
-        <h1 class="lead">AN ERROR OCCUERED</h1>   
-        <div class="auto">
-            <ion-button color="danger" class="retry-button" (click)="retry()">
-              RETRY
-            </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
-    
-    <!--If the page is loading show placeholders-->
-    
+    <ion-card-content>
+      <h1 class="lead">AN ERROR OCCUERED</h1>
+      <div class="auto">
+        <ion-button color="danger" class="retry-button" (click)="retry()">
+          RETRY
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
+  <!--If the page is loading show placeholders-->
+
+  <ion-infinite-scroll (ionInfinite)="loadingEvent($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more Movies...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

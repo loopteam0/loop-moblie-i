@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { YtsService } from '../../../services/yts.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 @Component({
   selector: 'app-movies-list',
@@ -9,7 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./movies-list.page.scss'],
 })
 export class MoviesListPage implements OnInit, OnDestroy {
-  movies :Array<any> = [];
+  movies :Array<any>=[];
   loading;
   error;
   page = 1;
@@ -17,14 +19,30 @@ export class MoviesListPage implements OnInit, OnDestroy {
   onRetry: any;
   subscription: Subscription;
   placeholder: boolean;
-  constructor(private YTS: YtsService, private route: Router) { }
+  enableSearch:boolean;
+
+  constructor(private YTS: YtsService, private route: Router, private UI:UiServiceService) { }
 
   ngOnInit() {
    this.showMovies();
   }
 
+
+  ionChange(val:string) {
+      console.log(val);
+    }
+  
+  ionClear(){
+    this.togleSearch()
+  }  
+
+  togleSearch(){
+    this.enableSearch = !this.enableSearch;
+  }
+
   showMovies(){
     this.loading = true;
+    this.error = false;
    this.subscription = this.YTS.getMoviesList( this.page, this.pageSize).subscribe(
       res =>{
        this.movies = res['movies'];
@@ -33,7 +51,7 @@ export class MoviesListPage implements OnInit, OnDestroy {
       }, err => {
         this.loading = false;
         this.error = true;
-        console.log('error');
+        this.UI.presentAlert('Error', err)
       }
     );
   }
@@ -51,10 +69,10 @@ export class MoviesListPage implements OnInit, OnDestroy {
        this.error = false;
        this.placeholder = false;
       }, err => {
-      //  this.loading = false;
+        this.loading = false;
         this.error = true;
+        this.UI.presentAlert('Error', err)
         e.target.complete();
-        console.log('error');
       }
     );
 
@@ -75,7 +93,7 @@ export class MoviesListPage implements OnInit, OnDestroy {
       }, err => {
         this.error = true;
         this.loading = false;
-        console.log(err);
+        this.UI.presentAlert('Error', err)      
       }
     );
   }

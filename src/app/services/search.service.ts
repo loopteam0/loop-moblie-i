@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, interval } from 'rxjs';
 import {  HttpErrorResponse, HttpClient } from '@angular/common/http';
-import { Http } from '@angular/http';
 import { MoviesInt } from './interface';
 import { catchError, retry, retryWhen, debounceTime, delay, throttle } from 'rxjs/operators';
 
@@ -21,7 +20,7 @@ export class SearchService {
   loading;
 
 
-  constructor(  private http: Http  , private httpClient: HttpClient) { }
+  constructor( private http: HttpClient) { }
 
 
 
@@ -48,11 +47,10 @@ export class SearchService {
   }
 
  /** GET ANIMATIONS */
-getAnimesList(animePage): Observable<MoviesInt> {
+getAnimesList(animePage): Observable<MoviesInt[]> {
   const url = `${this.base_url}/animes/${animePage}?sort=trending&order=-1&genre=all`;
-  return  this.http.get(url)
+  return  this.http.get<MoviesInt[]>(url)
   .pipe(
-    map(res => res.json()),
     // retry(3), // retry a failed request up to 3 times
     catchError(this.handleError) // then handle the error
   );
@@ -61,9 +59,8 @@ getAnimesList(animePage): Observable<MoviesInt> {
 
   getAnimeDetails(imdb_id): Observable<MoviesInt[]> {
     const url = `${this.base_url}/anime/${imdb_id}`;
-    return  this.http.get(url)
+    return  this.http.get<MoviesInt[]>(url)
     .pipe(
-       map(res => res.json()),
        retry(2), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );
@@ -72,21 +69,20 @@ getAnimesList(animePage): Observable<MoviesInt> {
 
   getAnimesByKeyword(keyword): Observable< MoviesInt[] > {
     const url = `${this.base_url}/animes/1?sort=year&order=-1&genre=all&keywords=${keyword}`;
-    return  this.http.get(url)
+    return  this.http.get<MoviesInt[]>(url)
     .pipe(
-      map(res => res.json()),
       retry(2), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );
 
     }
 
-  getQuotes(): Observable<MoviesInt> {
+
+  getQuotes(): Observable<any> {
     const url = `http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1`;
     return this.http.get(url).pipe(
         throttle(() => interval(500)),
       debounceTime(500),
-      map(res => res.json()),
       retry(10)
     );
   }
