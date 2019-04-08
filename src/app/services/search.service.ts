@@ -3,8 +3,7 @@ import { Observable, interval } from 'rxjs';
 import {  HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { MoviesInt } from './interface';
 import { catchError, retry, retryWhen, debounceTime, delay, throttle } from 'rxjs/operators';
-
-import { map, filter } from 'rxjs/operators';
+import { environment } from '../../environments/environment'
 import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Injectable({
@@ -13,11 +12,11 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 export class SearchService {
  
   /// show
-  eztv_url = 'https://eztv.ag/api/get-torrents?imdb_id=';
-  base_url = 'https://tv-v2.api-fetch.website';
+  eztv_url = environment.EZTV_URL;
+  base_url = environment.POPCORN_URL;
 
 
-  loading;
+  loading: any;
 
 
   constructor( private http: HttpClient) { }
@@ -43,11 +42,11 @@ export class SearchService {
       console.error(`Backend returned code ${error.status}, body was: ${error.status}`);
     }
     // return an observable with a user-facing error message
-    return throwError('Something bad happened, Check internet connection and retry.');
+    return throwError(error);
   }
 
  /** GET ANIMATIONS */
-getAnimesList(animePage): Observable<MoviesInt[]> {
+getAnimesList(animePage: string): Observable<MoviesInt[]> {
   const url = `${this.base_url}/animes/${animePage}?sort=trending&order=-1&genre=all`;
   return  this.http.get<MoviesInt[]>(url)
   .pipe(
@@ -57,7 +56,7 @@ getAnimesList(animePage): Observable<MoviesInt[]> {
 
   }
 
-  getAnimeDetails(imdb_id): Observable<MoviesInt[]> {
+  getAnimeDetails(imdb_id: string): Observable<MoviesInt[]> {
     const url = `${this.base_url}/anime/${imdb_id}`;
     return  this.http.get<MoviesInt[]>(url)
     .pipe(
@@ -67,7 +66,7 @@ getAnimesList(animePage): Observable<MoviesInt[]> {
 
   }
 
-  getAnimesByKeyword(keyword): Observable< MoviesInt[] > {
+  getAnimesByKeyword(keyword: string): Observable< MoviesInt[] > {
     const url = `${this.base_url}/animes/1?sort=year&order=-1&genre=all&keywords=${keyword}`;
     return  this.http.get<MoviesInt[]>(url)
     .pipe(

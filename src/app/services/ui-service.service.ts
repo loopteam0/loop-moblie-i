@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiServiceService {
 
-  constructor(public modalController: ModalController, private alertController:AlertController ) { }
+  _downloadDir = ''
 
+  constructor(public modalController: ModalController,
+     private alertController:AlertController,
+     public toastController: ToastController,
+     private fileOpener: FileOpener
+     ) { }
+
+     // modal controller
   async modal(data, component) {
     const modal = await this.modalController.create({
       component: component,
@@ -25,4 +33,32 @@ export class UiServiceService {
   
     await alert.present();
   }
+
+  async presentToast(message:string, duration = 5000) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+  }
+
+  openFile(path:string){
+    this.fileOpener.open(path, 'application/x-bittorrent').then(
+     res => this.presentToast(res)
+    ).catch(
+     err => this.presentToast(err)
+    )
+
+  }
+  
+  checkAppAvailability(fileType:string, optionalType?:string){
+    this.fileOpener.appIsInstalled(fileType || optionalType).catch(
+      res => this.presentToast('A torrent client is available', res)
+    ).catch(
+      err => this.presentToast(err)
+    )
+  }
+
+
+
 }

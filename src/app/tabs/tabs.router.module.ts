@@ -62,15 +62,6 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'spinner',
-        children: [
-          {
-            path: '',
-            loadChildren: '../pages/spinner/spinner.module#SpinnerPageModule'
-          }
-        ]
-      },
-      {
         path: '',
         redirectTo: 'movies-list',
         pathMatch: 'full'

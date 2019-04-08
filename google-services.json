@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "497829188991",
+    "firebase_url": "https://looptime-cd3a9.firebaseio.com",
+    "project_id": "looptime-cd3a9",
+    "storage_bucket": "looptime-cd3a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497829188991:android:c6ab77e221d4d351",
+        "android_client_info": {
+          "package_name": "com.loopclient.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497829188991-bskv1lbat8qiqqlnhjr83b1342e0v7k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-NrWeBQ2HtsLHLUN2UzpkdxRK5KQEHqI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { OrderByPipe } from 'ngx-pipes';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 @Component({
   selector: 'app-shows-download-modal',
@@ -13,8 +14,11 @@ export class ShowsDownloadModalPage implements OnInit {
   data: any;
   
 
-  constructor(public modalController: ModalController,private orderBy: OrderByPipe) { 
-  }
+  constructor(public modalController: ModalController,
+    private orderBy: OrderByPipe,
+     private UI: UiServiceService
+    
+     ) {}
 
   ngOnInit() {
     
@@ -25,7 +29,9 @@ export class ShowsDownloadModalPage implements OnInit {
   }
 
   download(url) {
-    
+    this.UI.checkAppAvailability('bittorrent', 'Bittorrent');
+
+    this.UI.openFile(url)
   }
 
 }

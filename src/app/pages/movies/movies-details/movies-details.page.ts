@@ -8,6 +8,7 @@ import { IonRouterOutlet } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { PopcornService } from 'src/app/services/popcorn.service';
 
 @Component({
   selector: 'app-movies-details',
@@ -29,7 +30,8 @@ export class MoviesDetailsPage implements OnInit ,OnDestroy {
     private YTS: YtsService,
     private UI: UiServiceService,
     private router: IonRouterOutlet,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private popcorn: PopcornService
   ) {}
 
   ngOnInit() {
@@ -38,10 +40,11 @@ export class MoviesDetailsPage implements OnInit ,OnDestroy {
       const imdb_id = params.get('imdb_id');
       this.img_id = params.get('id');
       this.Id = imdb_id;
+      
     });
 
     this.showDetails(this.Id);
-    this.showImages(this.img_id);
+    this.showImages();
   }
 
   showDetails(id) {
@@ -62,14 +65,16 @@ export class MoviesDetailsPage implements OnInit ,OnDestroy {
     );
   }
 
-  showImages(id: string) {
-    this.Image_subscription = this.YTS.getImages(id, 'movies')
-      .pipe(map((res) => res['moviebackground']))
-      .subscribe((res) =>{
-         const img =  res[1].url;
-         this.fanart = this.sanitizer.bypassSecurityTrustUrl(img)
-        }, err => console.log(err));
+  showImages() {
+    this.Image_subscription = this.popcorn.getMovieDetails(this.img_id.substr(2)).subscribe(
+      res => { this.fanart = res ;
+        console.log(res);
+      })
   }
+
+  setBackground(url:string){
+    return this.sanitizer.bypassSecurityTrustUrl(url);    
+   }
 
   showDownloadModal(data) {
     this.UI.modal(data, MovieDownloadModalPage);

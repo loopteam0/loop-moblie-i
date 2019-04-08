@@ -3,14 +3,16 @@
     <ion-title *ngIf="!enableSearch">Movies</ion-title>
 
     <ion-buttons slot="end">
-
       <ion-button class="search" *ngIf="!enableSearch" (click)="togleSearch()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
 
+      <ion-button class="search" *ngIf="enableSearch" (click)="showMovies()" (click)="togleSearch()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
-    <ion-searchbar #input animated debounce='2000' class="search" *ngIf="enableSearch"
+    <ion-searchbar #input animated debounce='1000' class="search" *ngIf="enableSearch"
     (ionClear)='ionClear()' (ionChange)='ionChange(input.value)'  
      placeholder="Search Movies"></ion-searchbar>
 
@@ -57,8 +59,21 @@
 
 <ion-content padding class="page-content">
 
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Release to refresh"
+          refreshingSpinner="bubbles"
+          refreshingText="Refreshing content...">
+        </ion-refresher-content>
+      </ion-refresher>
+      
+      <div *ngIf="loading_i" class="item-x">
+        <ion-spinner  name="crescent"></ion-spinner>
+      </div>
+
   <div>
-    <div *ngIf="movies">
+    <div *ngIf="movies || !loading_i">
       <div>
         <div class="movies current">
           <div *ngFor="let movie of movies" class="movie-detail" tappable>
@@ -89,31 +104,9 @@
       </div>
     </div>
 
-   
-
-    <div *ngIf="loading || placeholder">
-      <div class="spinner" *ngIf="loading"></div>
-      <div class="movies current">
-        <div *ngFor="let i of [1,2,3,4,5,6,7]" class="movie-detail loading">
-          <div class="poster">
-            <div class="content">
-            </div>
-          </div>
-          <div class="item-content">
-            <span class="title">&nbsp;</span>
-            <span class="country">&nbsp;</span>
-            <span class="genre ">&nbsp;</span>
-            <span class="line">
-              <span class="date">&nbsp;</span>
-              <span class="time">&nbsp;</span>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
+  
   </div>
+
   <ion-card class="error-card" *ngIf="error">
     <ion-card-content>
       <h1 class="lead">AN ERROR OCCUERED</h1>
@@ -126,9 +119,31 @@
   </ion-card>
 
   <!--If the page is loading show placeholders-->
+  <div class="spinner" *ngIf="loading"></div>
 
   <ion-infinite-scroll (ionInfinite)="loadingEvent($event)">
       <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more Movies...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
+
+    
+    <div *ngIf="loading || placeholder ||loading_i">
+      <div class="movies current">
+        <div *ngFor="let i of [1,2,3,4]" class="movie-detail loading">
+          <div class="poster">
+            <div class="content">
+            </div>
+          </div>
+          <div class="item-content">
+            <ion-skeleton-text animated width="60%"></ion-skeleton-text>
+            <ion-skeleton-text animated width="60%"></ion-skeleton-text>
+            <ion-skeleton-text animated width="30%"></ion-skeleton-text>
+            <ion-skeleton-text animated width="30%"></ion-skeleton-text>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
 </ion-content>

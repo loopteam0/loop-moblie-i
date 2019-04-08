@@ -91,7 +91,7 @@
 
   .item-x{
     width: 100%;
-    height: 100%;
+    max-width: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,9 +100,9 @@
     }
 }
 
-// .search{
-//   transition: all 0.5s linear;
-// }
+.search{
+  transition: all 0.5s linear;
+}
 
 //   animations
   @-webkit-keyframes sk-scaleout {

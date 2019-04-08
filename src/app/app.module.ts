@@ -5,26 +5,31 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import { ShowsDownloadModalPage } from './pages/shows/shows-download-modal/shows-download-modal.page';
-import { MovieDownloadModalPage } from './pages/movies/movie-download-modal/movie-download-modal.page';
-
 
 @NgModule({
-  declarations: [AppComponent, ShowsDownloadModalPage,MovieDownloadModalPage],
-  entryComponents: [ ShowsDownloadModalPage, MovieDownloadModalPage],
-  imports: [BrowserModule,HttpClientModule,HttpModule,
-     IonicModule.forRoot(), AppRoutingModule ],
+  declarations: [AppComponent],
+  entryComponents: [],
+
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    HttpModule,
+    IonicModule.forRoot(),
+    AppRoutingModule
+  ],
+
   providers: [
     StatusBar,
     SplashScreen,
+    FileOpener,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-

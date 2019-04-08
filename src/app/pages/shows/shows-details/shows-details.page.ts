@@ -5,7 +5,7 @@ import { PopcornService } from '../../../services/popcorn.service';
 import { UiServiceService } from '../../../services/ui-service.service';
 import { ShowsDownloadModalPage } from '../shows-download-modal/shows-download-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-shows-details',
@@ -64,8 +64,8 @@ export class ShowsDetailsPage implements OnInit, OnDestroy {
   }
 
   doRefresh(e) {
-    e.target.complete();
     this.showDetails(this.Id);
+    timer(2000).subscribe(e.target.complete())
   }
 
   ngOnDestroy(): void {

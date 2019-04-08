@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MoviesInt } from './interface';
 import { catchError, retry, retryWhen, delay } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
+import { environment } from './../../environments/environment';
 
 
 @Injectable({
@@ -16,8 +16,8 @@ export class MovieDbService {
   
   constructor( private httpClient: HttpClient) { }
 
-  baseUrl = 'https://api.themoviedb.org/3';
-  apiKey = 'c3a07ff98aaeb2065ebee321bf08d23a';
+  baseUrl =   environment.MOVIEDB_APIURL;
+  apiKey = environment.MOVIEDB_APIKEY;
 
   // example
 // https://api.themoviedb.org/3/movie/550?api_key=c3a07ff98aaeb2065ebee321bf08d23a

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, interval } from 'rxjs';
 import {  HttpErrorResponse, HttpClient } from '@angular/common/http';
-import { Http } from '@angular/http';
 import { MoviesInt } from './interface';
 import { catchError, retry, retryWhen, debounceTime, delay, throttle } from 'rxjs/operators';
-
 import { map, filter } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +14,10 @@ export class PopcornService {
 
 
     /// show
-    eztv_url = 'https://eztv.ag/api/get-torrents?imdb_id=';
-    base_url = 'https://tv-v2.api-fetch.website';
+    eztv_url = environment.EZTV_URL;
+    base_url = environment.POPCORN_URL;
   
-    constructor(  private http: Http  , private httpClient: HttpClient) { }
+    constructor( private httpClient: HttpClient) { }
   
     /** error handling */
     public handleError(error: HttpErrorResponse) {
@@ -37,7 +36,7 @@ export class PopcornService {
   
   /* Possible values:  name , rating , released , trending , updated , year  */
   /*** GET TV SHOWS */
-    getShowsList(showPage): Observable<MoviesInt[]> {
+    getShowsList(showPage: number): Observable<MoviesInt[]> {
       const url = `${this.base_url}/shows/${showPage}?sort=trending&order=-1&genre=all`;
     return  this.httpClient.get<MoviesInt[]>(url)
     .pipe(
@@ -47,7 +46,7 @@ export class PopcornService {
   
     }
   
-    getShowDetails(imdb_id): Observable<MoviesInt> {
+    getShowDetails(imdb_id: any): Observable<MoviesInt> {
       const url = `${this.base_url}/show/tt${imdb_id}`;
       return  this.httpClient.get<MoviesInt>(url)
       .pipe(
@@ -57,7 +56,7 @@ export class PopcornService {
   
     }
   
-    getShowEpisopse(imdb_id , size, page): Observable<MoviesInt[]> {
+    getShowEpisopse(imdb_id: any , size: any, page: any): Observable<MoviesInt[]> {
         const url = `${this.eztv_url}${imdb_id}&limit=${size}&page=${page}`;
         return  this.httpClient.get<MoviesInt[]>(url)
         .pipe(
@@ -67,7 +66,7 @@ export class PopcornService {
   
     }
   
-    getShowsByKeyword(keyword): Observable<MoviesInt[]> {
+    getShowsByKeyword(keyword: any): Observable<MoviesInt[]> {
       const url = `${this.base_url}/shows/1?sort=year&order=-1&genre=all&keywords=${keyword}`;
       return  this.httpClient.get<MoviesInt[]>(url)
       .pipe(
@@ -77,5 +76,13 @@ export class PopcornService {
   
       }
   
-  
+      getMovieDetails(imdb_id: any): Observable<MoviesInt> {
+        const url = `${this.base_url}/movie/tt${imdb_id}`;
+        return  this.httpClient.get<MoviesInt>(url)
+        .pipe(
+           retry(2), // retry a failed request up to 3 times
+          catchError(this.handleError) // then handle the error
+        );
+    
+      }
 }

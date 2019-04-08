@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { ShowsDetailsPage } from './shows-details.page';
 import { SharedModule } from 'src/shared/shared.module';
+import { ShowsDownloadModalPage } from '../shows-download-modal/shows-download-modal.page';
+import { MovieDownloadModalPage } from '../../movies/movie-download-modal/movie-download-modal.page';
 
 const routes: Routes = [
   {
@@ -23,6 +25,11 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [ShowsDetailsPage]
+  declarations: [
+    ShowsDetailsPage,
+    ShowsDownloadModalPage,
+    MovieDownloadModalPage
+  ],
+  entryComponents: [ShowsDownloadModalPage, MovieDownloadModalPage]
 })
 export class ShowsDetailsPageModule {}

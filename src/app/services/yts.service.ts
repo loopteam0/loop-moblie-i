@@ -7,6 +7,7 @@ import { catchError, retry, retryWhen, debounceTime, delay, throttle } from 'rxj
 
 import { map, filter } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -15,10 +16,11 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 export class YtsService {
 
    /// movie
-   yts_url = 'https://yts.am/api/v2/';
-   FANART_URL = 'http://webservice.fanart.tv/v3';
-   Api_Key = '9835c7b65e0db4c3c367c14c9b596483';
-   constructor(  private http: Http  , private httpClient: HttpClient ) { }
+   yts_url = environment.YTS_API;
+   FANART_URL = environment.FANART_URL;
+   Api_Key = environment.FANART_APIKEY;
+
+   constructor( private httpClient: HttpClient ) { }
  
  
  
@@ -41,7 +43,7 @@ export class YtsService {
        console.error(`Backend returned code ${error.status}, body was: ${error.status}`);
      }
      // return an observable with a user-facing error message
-     return throwError('Something bad happened, Check internet connection and retry.');
+     return throwError(error);
    }
  
  
@@ -88,6 +90,7 @@ export class YtsService {
       const url = `${this.yts_url}list_movies.json?query_term=${keyword}&sort_by=download_count&limit=50`;
      return  this.httpClient.get<MoviesInt[]>(url)
      .pipe(
+      map(res => res['data']),
        catchError(this.handleError), // then handle the error
         retry(2) // retry a failed request up to 3 times
      );
